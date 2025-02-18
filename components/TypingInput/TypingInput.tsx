@@ -12,7 +12,6 @@ interface TypingInputProps {
 export const TypingInput = ({ currentWord }: TypingInputProps) => {
   const splitWord = currentWord.word.split("");
   const [currentActiveIndex, setCurrentActiveIndex] = useState(0);
-  const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<TextInput>(null);
 
   useEffect(() => {
@@ -20,16 +19,17 @@ export const TypingInput = ({ currentWord }: TypingInputProps) => {
   }, [currentWord]);
 
   return (
-    <View className="flex flex-col items-center justify-center w-full h-full">
+    <View className="flex flex-col items-center justify-center w-full mb-6">
       <Input
         ref={inputRef}
         focusable={false}
         autoComplete="off"
         textContentType="none"
         autoCapitalize="none"
-        secureTextEntry={true}
         autoCorrect={false}
-        placeholder="Email"
+        spellCheck={false}
+        keyboardType="default"
+        secureTextEntry={true}
         className="pointer-events-none opacity-0"
         value={""}
         onChangeText={(text) => {
@@ -47,7 +47,7 @@ export const TypingInput = ({ currentWord }: TypingInputProps) => {
         {splitWord.map((letter, index) => (
           <Text
             key={`${index}-${letter}`}
-            className={`flex-1 text-center text-2xl text-zinc-300 border border-zinc-800 rounded-md p-1 ${
+            className={`flex-1 min-w-6 min-h-10 text-center text-2xl text-zinc-300 border border-zinc-800 rounded-md p-1 ${
               currentActiveIndex === index ? "border-sky-400" : ""
             }`}
           >
