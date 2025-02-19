@@ -4,6 +4,8 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 ## Get started
 
+```eas build -p android --profile preview``` (to build apk)
+
 1. Install dependencies
 
    ```bash

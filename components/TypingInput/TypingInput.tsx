@@ -8,33 +8,25 @@ import * as Speech from "expo-speech";
 const ERROR_COUNT_LIMIT = 3;
 
 interface TypingInputProps {
-  currentWord: TypingWords;
+  currentWord: string;
+  currentActiveIndex: number;
+  isErrorActive: boolean;
+  errorChar: string;
 }
 
-export const TypingInput = ({ currentWord }: TypingInputProps) => {
-  const splitWord = currentWord.word.split("");
-  const [currentActiveIndex, setCurrentActiveIndex] = useState(0);
-  const [errorCount, setErrorCount] = useState(1);
-  const [isError, setIsError] = useState(false);
-  const inputRef = useRef<TextInput>(null);
-
-  useEffect(() => {
-    Speech.speak(currentWord.word);
-  }, [currentWord]);
-
-  useEffect(() => {
-    if (isError) {
-      setTimeout(() => {
-        setIsError(false);
-      }, 1000);
-    }
-  }, [isError]);
+export const TypingInput = ({
+  currentWord,
+  currentActiveIndex,
+  isErrorActive,
+  errorChar,
+}: TypingInputProps) => {
+  const splitWord = currentWord.split("");
 
   return (
     <View className="flex flex-col items-center justify-center w-full mb-6">
-      {isError && <Text>error</Text>}
-      <Input
+      {/* <Input
         ref={inputRef}
+        // autoFocus={true}
         focusable={false}
         autoComplete="off"
         textContentType="none"
@@ -48,30 +40,46 @@ export const TypingInput = ({ currentWord }: TypingInputProps) => {
         onChangeText={(text) => {
           const currentLetter = splitWord[currentActiveIndex];
 
+          if (currentActiveIndex === splitWord.length - 1) {
+            setCurrentActiveIndex(0);
+            return;
+          }
+
           if (text === currentLetter) {
-            setErrorCount(1);
+            setErrorCount(0);
             setCurrentActiveIndex((prev) => prev + 1);
             return;
           }
 
-          if (errorCount >= ERROR_COUNT_LIMIT) {
-          }
-          setIsError(true);
+          // if (errorCount >= ERROR_COUNT_LIMIT) {
+          //   setCurrentActiveIndex((prev) => prev + 1);
+          //   setErrorCount(0);
+          //   return;
+          // }
+
+          setErrorChar(text[0]);
           setErrorCount((prev) => prev + 1);
         }}
-      />
+      /> */}
       <View
-        onTouchStart={() => inputRef.current?.focus()}
+        // onTouchStart={() => inputRef.current?.focus()}
         className="flex flex-row items-center justify-center gap-1"
       >
         {splitWord.map((letter, index) => (
           <Text
             key={`${index}-${letter}`}
             className={`flex-1 min-w-6 min-h-10 text-center text-2xl text-zinc-300 border border-zinc-800 rounded-md p-1 ${
-              currentActiveIndex === index ? "border-sky-400" : ""
+              currentActiveIndex === index && !isErrorActive
+                ? "border-sky-400"
+                : ""
+            } ${
+              isErrorActive && currentActiveIndex === index
+                ? "border-red-500"
+                : ""
             }`}
           >
             {index < currentActiveIndex ? letter : ""}
+            {isErrorActive && currentActiveIndex === index ? errorChar : null}
           </Text>
         ))}
       </View>
