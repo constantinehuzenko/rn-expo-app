@@ -135,10 +135,11 @@ export default function TypingTab() {
           errorChar={errorCharacter}
           // isErrorActive={isErrorActive}
         />
-        <Button variant="outline">
-          <Text onPress={() => Speech.speak(currentWord?.word || "")}>
-            🔊 Listen
-          </Text>
+        <Button
+          onPress={() => Speech.speak(currentWord?.word || "")}
+          variant="outline"
+        >
+          <Text>🔊 Listen</Text>
         </Button>
       </PageWrapper>
       <Keyboard onKeyboardPress={onKeyboardPress} />
