@@ -1,37 +1,26 @@
 import { PageWrapper } from "@/components/PageWrapper";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
-import { SETS_LIST_STORAGE_KEY } from "@/constants";
-import { TypingSetsList } from "@/constants/types";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useGlobalState } from "@/storage/global";
 import { ScrollView } from "react-native";
 
 export default function Set() {
-  const [sets, setSets] = useState<TypingSetsList>([]);
-  const { id } = useLocalSearchParams();
-  const currentSet = sets.find((set) => set.id === id);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await AsyncStorage.getItem(SETS_LIST_STORAGE_KEY);
-      const parsedData = JSON.parse(data || "[]");
-      setSets(parsedData as TypingSetsList);
-    };
-
-    fetchData();
-  }, []);
+  const { getCurrentFolder } = useGlobalState();
+  const currentFolder = getCurrentFolder();
 
   return (
     <PageWrapper>
-      <ScrollView className="w-full flex">
-        <Text className="text-2xl">{currentSet?.name}</Text>
-        <Text className="text-lg">{currentSet?.description}</Text>
-        {currentSet?.words.map(({ word }) => (
-          <Text key={word}>{word}</Text>
-        ))}
-      </ScrollView>
+      {currentFolder ? (
+        <ScrollView className="w-full flex">
+          <Text className="text-2xl">{currentFolder?.name}</Text>
+          <Text className="text-lg">{currentFolder?.description}</Text>
+          {currentFolder?.words.map(({ word }) => (
+            <Text key={word}>{word}</Text>
+          ))}
+        </ScrollView>
+      ) : (
+        <Text>Folder not found</Text>
+      )}
       <Button>
         <Text>💪 Type</Text>
       </Button>

@@ -8,8 +8,9 @@ import { Keyboard } from "@/components/Keyboard/Keyboard";
 import { useCallback, useEffect } from "react";
 import { useGlobalState } from "@/storage/global";
 import { Badge } from "@/components/ui/badge";
-import { SafeAreaView, View } from "react-native";
+import { View } from "react-native";
 import { useFocusEffect } from "expo-router";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function TypingTab() {
   const {

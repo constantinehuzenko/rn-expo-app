@@ -1,5 +1,5 @@
 import { typingDefaultList } from "@/constants/data";
-import { TypingSetsList } from "@/constants/types";
+import { Folders, TypingSetsList } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
@@ -7,6 +7,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 interface GlobalStore {
   folderId: string;
   setFolderId: (folderId: string) => void;
+  getCurrentFolder: () => Folders | undefined;
 
   currentCharacterIndex: number;
   setNextCurrentCharacterIndex: (step?: number) => void;
@@ -31,6 +32,10 @@ export const useGlobalState = create<GlobalStore>()(
     (set, get) => ({
       folderId: "0",
       setFolderId: (folderId) => set({ folderId }),
+      getCurrentFolder: () =>
+        get().localFolders.find(
+          (item) => item.id === get().localCurrentFolderId
+        ),
 
       currentCharacterIndex: 0,
       setNextCurrentCharacterIndex: (step = 1) =>
