@@ -361,7 +361,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.costantine900.firstrnexpoapp;
-				PRODUCT_NAME = firstrnexpoapp;
+				PRODUCT_NAME = "firstrnexpoapp";
 				SWIFT_OBJC_BRIDGING_HEADER = "firstrnexpoapp/firstrnexpoapp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -389,7 +389,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.costantine900.firstrnexpoapp;
-				PRODUCT_NAME = firstrnexpoapp;
+				PRODUCT_NAME = "firstrnexpoapp";
 				SWIFT_OBJC_BRIDGING_HEADER = "firstrnexpoapp/firstrnexpoapp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
