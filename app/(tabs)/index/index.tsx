@@ -106,7 +106,28 @@ export default function TypingTab() {
       </PageWrapper>
 
       <View className="flex flex-row justify-center gap-2 m-4">
-        <Button onPress={() => {}} variant="outline">
+        <Button
+          onPress={() => {
+            const isThisLastWord =
+              localCurrentWordId === currentFolder?.words.slice(-1)[0].id;
+
+            if (isThisLastWord) {
+              setLocalCurrentWordId(currentFolder?.words[0].id || "");
+              resetCurrentCharacterIndex();
+              return;
+            }
+
+            const currentWordIndex =
+              currentFolder?.words.findIndex(
+                (item) => item.id === localCurrentWordId
+              ) || 0;
+            const nextWordId =
+              currentFolder?.words[currentWordIndex + 1].id || "";
+            setLocalCurrentWordId(nextWordId);
+            resetCurrentCharacterIndex();
+          }}
+          variant="outline"
+        >
           <Text>⏭️ Word</Text>
         </Button>
 

@@ -1,7 +1,6 @@
 import { View } from "react-native";
 import { Text } from "../ui/text";
 import clsx from "clsx";
-import shallow from "zustand/shallow";
 import { useGlobalState } from "@/storage/global";
 
 interface TypingInputProps {
