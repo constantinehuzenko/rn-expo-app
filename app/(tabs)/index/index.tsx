@@ -42,13 +42,6 @@ export default function TypingTab() {
   const isErrorActive = getIsErrorActive();
 
   useEffect(() => {
-    (async () => {
-      const storedData = await AsyncStorage.getItem("global-storage1");
-      console.log("🔵 Parsed Zustand State:", JSON.parse(storedData || "{}"));
-    })();
-  }, [useGlobalState((state) => state)]);
-
-  useEffect(() => {
     const getCurrentWordId = async () => {
       const currentWordId = await AsyncStorage.getItem(CURRENT_WORD_ID);
 

@@ -6,14 +6,9 @@ interface PageWrapperProps {
 }
 
 export const PageWrapper = ({ children }: PageWrapperProps) => {
-  return <SafeAreaView style={styles.container}>{children}</SafeAreaView>;
+  return (
+    <SafeAreaView className="flex-1 items-center justify-center p-4">
+      {children}
+    </SafeAreaView>
+  );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 16,
-  },
-});

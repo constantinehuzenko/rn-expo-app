@@ -39,7 +39,7 @@ export const useGlobalState = create<GlobalStore>()(
 
       localStorageWasInitialized: false,
       localStorageFolders: [],
-      localStorageCurrentFolderId: "",
+      localStorageCurrentFolderId: "0",
       setLocalStorageCurrentFolderId: (localStorageCurrentFolderId) =>
         set({ localStorageCurrentFolderId }),
     }),

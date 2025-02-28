@@ -23,12 +23,11 @@ export const Keyboard = ({ onKeyboardPress }: KeyboardProps) => {
               key={`${key}-${keyIndex}`}
               size="lg"
               variant="outline"
-              style={{ padding: 0 }}
               className={clsx(
-                " w-full max-w-12 h-12 flex justify-center items-center text-center flex-1 p-1 m-px border border-zinc-800 rounded-md",
+                " w-full max-w-12 h-12 flex justify-center items-center text-center flex-1 p-1 m-px border border-zinc-800 rounded-md active:translate-y-[-40px] active:z-10 transition duration-100",
                 { "opacity-0 pointer-events-none": key === "" },
-                { "left-[-5%]": index === 1},
-                { "left-[-5%]": index === 2}
+                { "left-[-5%]": index === 1 },
+                { "left-[-5%]": index === 2 }
               )}
               onPress={() => onKeyboardPress(key)}
             >
