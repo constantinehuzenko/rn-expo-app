@@ -44,7 +44,7 @@ export const useGlobalState = create<GlobalStore>()(
         set({ localStorageCurrentFolderId }),
     }),
     {
-      name: "global-storage1",
+      name: "global-storage3",
       storage: createJSONStorage(() => AsyncStorage),
 
       partialize: (state) => ({

@@ -31,16 +31,17 @@ export const TypingInput = ({
 
   return (
     <View className="flex flex-col items-center justify-center w-full mb-6">
-      <View className="flex flex-row items-center justify-center gap-1">
+      <View className="flex flex-row flex-wrap items-center justify-center gap-1">
         {splitWord.map((letter, index) => (
           <View
             className={clsx(
-              "flex justify-center items-center min-w-8 min-h-10 text-center border border-zinc-800 rounded-md p-1",
+              "flex justify-center items-center min-w-8 min-h-10 text-center border  rounded-md p-1",
               {
+                "border-zinc-800": currentCharacterIndex !== index,
                 "border-zinc-300":
                   currentCharacterIndex === index && !isErrorActive,
                 "border-red-600":
-                  isErrorActive && currentCharacterIndex === index,
+                  currentCharacterIndex === index && isErrorActive,
               }
             )}
             key={`${index}-${letter}`}

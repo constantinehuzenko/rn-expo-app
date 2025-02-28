@@ -61,17 +61,6 @@ export default function TypingTab() {
   }, []);
 
   useEffect(() => {
-    const setDefaultFolders = async () => {
-      const folders =
-        (await AsyncStorage.getItem(FOLDERS_STORAGE_KEY)) === null;
-      if (folders) {
-        storeData(typingDefaultList);
-      }
-    };
-    setDefaultFolders();
-  }, []);
-
-  useEffect(() => {
     // Speech.speak(currentWord.word);
   }, [currentWord]);
 
