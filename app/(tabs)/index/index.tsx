@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 export default function TypingTab() {
   const {
     currentCharacterIndex,
-    setCurrentCharacterIndex,
+    setNextCurrentCharacterIndex,
     resetCurrentCharacterIndex,
     errorCharacter,
     setErrorCharacter,
@@ -55,8 +55,14 @@ export default function TypingTab() {
       localCurrentWordId === currentFolder?.words.slice(-1)[0].id;
     const shouldStartFolderFromBeginning =
       isLastLetter && key === currentLetter && isThisLastWord;
-
     const shouldGoToNextWord = isLastLetter && key === currentLetter;
+    const nextChart = splitWord[currentCharacterIndex + 1];
+    const isLetter = (char: string) => /^[a-zA-Z]$/.test(char);
+
+    if (currentLetter !== key) {
+      setErrorCharacter(key[0]);
+      return;
+    }
 
     if (shouldStartFolderFromBeginning) {
       setLocalCurrentWordId(currentFolder?.words[0].id);
@@ -75,13 +81,13 @@ export default function TypingTab() {
       return;
     }
 
-    if (currentCharacterIndex === splitWord.length - 1) {
-      resetCurrentCharacterIndex();
+    if (!isLetter(nextChart) && nextChart !== undefined) {
+      setNextCurrentCharacterIndex(2);
       return;
     }
 
     if (key === currentLetter) {
-      setCurrentCharacterIndex();
+      setNextCurrentCharacterIndex();
       return;
     }
 
@@ -95,12 +101,7 @@ export default function TypingTab() {
           <Text>CURRENT FOLDER: {currentFolder?.name}</Text>
         </Badge>
 
-        <TypingInput
-          currentWord={currentWord?.word || ""}
-          // currentCharacterIndex={currentCharacterIndex}
-          errorChar={errorCharacter}
-          // isErrorActive={isErrorActive}
-        />
+        <TypingInput currentWord={currentWord?.word || ""} />
         <Button
           onPress={() => Speech.speak(currentWord?.word || "")}
           variant="outline"

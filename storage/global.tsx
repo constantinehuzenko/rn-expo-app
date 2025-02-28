@@ -9,7 +9,7 @@ interface GlobalStore {
   setFolderId: (folderId: string) => void;
 
   currentCharacterIndex: number;
-  setCurrentCharacterIndex: () => void;
+  setNextCurrentCharacterIndex: (step?: number) => void;
   resetCurrentCharacterIndex: () => void;
 
   errorCharacter: string;
@@ -33,8 +33,8 @@ export const useGlobalState = create<GlobalStore>()(
       setFolderId: (folderId) => set({ folderId }),
 
       currentCharacterIndex: 0,
-      setCurrentCharacterIndex: () =>
-        set({ currentCharacterIndex: get().currentCharacterIndex + 1 }),
+      setNextCurrentCharacterIndex: (step = 1) =>
+        set({ currentCharacterIndex: get().currentCharacterIndex + step }),
       resetCurrentCharacterIndex: () => set({ currentCharacterIndex: 0 }),
 
       errorCharacter: "",
@@ -60,6 +60,7 @@ export const useGlobalState = create<GlobalStore>()(
         localWasInitialized: state.localWasInitialized,
         localFolders: state.localFolders,
         localCurrentFolderId: state.localCurrentFolderId,
+        localCurrentWordId: state.localCurrentWordId,
       }),
 
       onRehydrateStorage: () => {

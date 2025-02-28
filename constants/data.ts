@@ -32,8 +32,8 @@ export const typingDefaultList: TypingSetsList = [
     name: "Tiny folder",
     description: "A list of words to practice typing",
     words: [
-      { id: "0", word: "sss" },
-      { id: "1", word: "ddd" },
+      { id: "0", word: "s s" },
+      { id: "1", word: "d-d" },
       { id: "2", word: "fff" },
     ],
   },
