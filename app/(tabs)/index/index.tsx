@@ -5,10 +5,11 @@ import { Text } from "@/components/ui/text";
 import { typingDefaultList } from "@/constants/data";
 import * as Speech from "expo-speech";
 import { Keyboard } from "@/components/Keyboard/Keyboard";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useGlobalState } from "@/storage/global";
 import { Badge } from "@/components/ui/badge";
 import { SafeAreaView, View } from "react-native";
+import { useFocusEffect } from "expo-router";
 
 export default function TypingTab() {
   const {
@@ -48,6 +49,16 @@ export default function TypingTab() {
       }, 250);
     }
   }, [errorCharacter]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBlur = () => {
+        resetCurrentCharacterIndex();
+      };
+
+      return () => onBlur();
+    }, [])
+  );
 
   const onKeyboardPress = (key: string) => {
     const isLastLetter = currentCharacterIndex === splitWord.length - 1;
