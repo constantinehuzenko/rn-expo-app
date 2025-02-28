@@ -15,7 +15,7 @@ export interface KeyboardProps {
 
 export const Keyboard = ({ onKeyboardPress }: KeyboardProps) => {
   return (
-    <View className="flex flex-1 flex-col items-center justify-center w-full">
+    <View className="flex flex-2 flex-col items-center justify-center w-full mb-10">
       {KEYBOARD_ROWS.map((row, index) => (
         <View key={index} className="flex flex-row justify-center">
           {row.map((key, keyIndex) => (

@@ -21,7 +21,7 @@ export const TypingInput = ({ currentWord }: TypingInputProps) => {
         {splitWord.map((letter, index) => (
           <View
             className={clsx(
-              "relative flex justify-center items-center min-w-8 min-h-10 text-center border  rounded-md p-1",
+              "relative flex justify-center items-center w-7 h-10 text-center border rounded-md p-1",
               {
                 "border-zinc-800": currentCharacterIndex !== index,
                 "border-zinc-300":

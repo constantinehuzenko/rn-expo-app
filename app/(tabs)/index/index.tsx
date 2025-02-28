@@ -8,6 +8,7 @@ import { Keyboard } from "@/components/Keyboard/Keyboard";
 import { useEffect } from "react";
 import { useGlobalState } from "@/storage/global";
 import { Badge } from "@/components/ui/badge";
+import { SafeAreaView, View } from "react-native";
 
 export default function TypingTab() {
   const {
@@ -95,21 +96,36 @@ export default function TypingTab() {
   };
 
   return (
-    <>
-      <PageWrapper>
-        <Badge className="mb-6" variant="outline">
-          <Text>CURRENT FOLDER: {currentFolder?.name}</Text>
-        </Badge>
+    <SafeAreaView className="flex flex-col items-center justify-center w-full h-full">
+      <Badge className="mt-2" variant="outline">
+        <Text>CURRENT FOLDER: {currentFolder?.name}</Text>
+      </Badge>
 
+      <PageWrapper>
         <TypingInput currentWord={currentWord?.word || ""} />
+      </PageWrapper>
+
+      <View className="flex flex-row justify-center gap-2 m-4">
+        <Button onPress={() => {}} variant="outline">
+          <Text>⏭️ Word</Text>
+        </Button>
+
         <Button
           onPress={() => Speech.speak(currentWord?.word || "")}
           variant="outline"
         >
           <Text>🔊 Listen</Text>
         </Button>
-      </PageWrapper>
+        <Button
+          onPress={() =>
+            onKeyboardPress(splitWord?.[currentCharacterIndex] || "")
+          }
+          variant="outline"
+        >
+          <Text>⏩ Letter</Text>
+        </Button>
+      </View>
       <Keyboard onKeyboardPress={onKeyboardPress} />
-    </>
+    </SafeAreaView>
   );
 }
