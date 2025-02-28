@@ -5,20 +5,9 @@ import { Text } from "@/components/ui/text";
 import { typingDefaultList } from "@/constants/data";
 import * as Speech from "expo-speech";
 import { Keyboard } from "@/components/Keyboard/Keyboard";
-import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { TypingSetsList } from "@/constants/types";
-import { CURRENT_WORD_ID, FOLDERS_STORAGE_KEY } from "@/constants";
+import { useEffect } from "react";
 import { useGlobalState } from "@/storage/global";
 import { Badge } from "@/components/ui/badge";
-
-const storeData = async (value: TypingSetsList) => {
-  try {
-    await AsyncStorage.setItem(FOLDERS_STORAGE_KEY, JSON.stringify(value));
-  } catch (e) {
-    // saving error
-  }
-};
 
 export default function TypingTab() {
   const {
@@ -28,36 +17,23 @@ export default function TypingTab() {
     errorCharacter,
     setErrorCharacter,
     getIsErrorActive,
-    localStorageCurrentFolderId,
+    localCurrentFolderId,
+    localCurrentWordId,
+    setLocalCurrentWordId,
   } = useGlobalState();
-  const [currentWordId, setCurrentWordId] = useState("");
-  const { folderId } = useGlobalState();
   const currentFolder = typingDefaultList.find(
-    (item) => item.id === localStorageCurrentFolderId
+    (item) => item.id == localCurrentFolderId
   );
   const currentWord = currentFolder?.words.find(
-    (item) => item.id === currentWordId
+    (item) => item.id === localCurrentWordId
   );
   const splitWord = currentWord?.word.split("") || "";
   const isErrorActive = getIsErrorActive();
 
   useEffect(() => {
-    const getCurrentWordId = async () => {
-      const currentWordId = await AsyncStorage.getItem(CURRENT_WORD_ID);
-
-      if (currentWordId) {
-        setCurrentWordId(JSON.parse(currentWordId));
-        return;
-      }
-
-      const defaultWordId = currentFolder?.words[0].id;
-      await AsyncStorage.setItem(
-        CURRENT_WORD_ID,
-        JSON.stringify(defaultWordId)
-      );
-    };
-
-    getCurrentWordId();
+    if (localCurrentWordId === "") {
+      setLocalCurrentWordId(currentFolder?.words[0].id || "");
+    }
   }, []);
 
   useEffect(() => {
@@ -76,24 +52,25 @@ export default function TypingTab() {
     const isLastLetter = currentCharacterIndex === splitWord.length - 1;
     const currentLetter = splitWord?.[currentCharacterIndex];
     const isThisLastWord =
-      currentWordId === currentFolder?.words.slice(-1)[0].id;
+      localCurrentWordId === currentFolder?.words.slice(-1)[0].id;
     const shouldStartFolderFromBeginning =
       isLastLetter && key === currentLetter && isThisLastWord;
 
     const shouldGoToNextWord = isLastLetter && key === currentLetter;
 
     if (shouldStartFolderFromBeginning) {
-      setCurrentWordId(currentFolder?.words[0].id);
+      setLocalCurrentWordId(currentFolder?.words[0].id);
       resetCurrentCharacterIndex();
       return;
     }
 
     if (shouldGoToNextWord) {
       const currentWordIndex =
-        currentFolder?.words.findIndex((item) => item.id === currentWordId) ||
-        0;
+        currentFolder?.words.findIndex(
+          (item) => item.id === localCurrentWordId
+        ) || 0;
       const nextWordId = currentFolder?.words[currentWordIndex + 1].id || "";
-      setCurrentWordId(nextWordId);
+      setLocalCurrentWordId(nextWordId);
       resetCurrentCharacterIndex();
       return;
     }

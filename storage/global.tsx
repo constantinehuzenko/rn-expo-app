@@ -16,10 +16,14 @@ interface GlobalStore {
   setErrorCharacter: (errorCharacter: string) => void;
   getIsErrorActive: () => boolean;
 
-  localStorageWasInitialized: boolean;
-  localStorageFolders: TypingSetsList;
-  localStorageCurrentFolderId: string;
-  setLocalStorageCurrentFolderId: (localStorageCurrentFolderId: string) => void;
+  localWasInitialized: boolean;
+
+  localFolders: TypingSetsList;
+  localCurrentFolderId: string;
+  setLocalStorageCurrentFolderId: (localCurrentFolderId: string) => void;
+
+  localCurrentWordId: string;
+  setLocalCurrentWordId: (currentWordId: string) => void;
 }
 
 export const useGlobalState = create<GlobalStore>()(
@@ -37,28 +41,33 @@ export const useGlobalState = create<GlobalStore>()(
       setErrorCharacter: (errorCharacter) => set({ errorCharacter }),
       getIsErrorActive: () => get().errorCharacter !== "",
 
-      localStorageWasInitialized: false,
-      localStorageFolders: [],
-      localStorageCurrentFolderId: "0",
-      setLocalStorageCurrentFolderId: (localStorageCurrentFolderId) =>
-        set({ localStorageCurrentFolderId }),
+      localWasInitialized: false,
+
+      localFolders: [],
+      localCurrentFolderId: "0",
+      setLocalStorageCurrentFolderId: (localCurrentFolderId) =>
+        set({ localCurrentFolderId }),
+
+      localCurrentWordId: "",
+      setLocalCurrentWordId: (localCurrentWordId) =>
+        set({ localCurrentWordId }),
     }),
     {
       name: "global-storage3",
       storage: createJSONStorage(() => AsyncStorage),
 
       partialize: (state) => ({
-        localStorageWasInitialized: state.localStorageWasInitialized,
-        localStorageFolders: state.localStorageFolders,
-        localStorageCurrentFolderId: state.localStorageCurrentFolderId,
+        localWasInitialized: state.localWasInitialized,
+        localFolders: state.localFolders,
+        localCurrentFolderId: state.localCurrentFolderId,
       }),
 
       onRehydrateStorage: () => {
         return (storedState) => {
-          if (storedState && !storedState.localStorageWasInitialized) {
+          if (storedState && !storedState.localWasInitialized) {
             useGlobalState.setState({
-              localStorageWasInitialized: true,
-              localStorageFolders: typingDefaultList,
+              localWasInitialized: true,
+              localFolders: typingDefaultList,
             });
           }
         };
