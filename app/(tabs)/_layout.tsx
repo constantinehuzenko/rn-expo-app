@@ -5,19 +5,19 @@ export default function Layout() {
   return (
     <Tabs>
       <Tabs.Screen
-        name="index"
+        name="index/index"
         options={{
           headerShown: false,
           title: "Typing",
           animation: "shift",
-          tabBarIcon: () => <Text>✏️</Text>,
+          tabBarIcon: () => <Text>💪</Text>,
         }}
       />
       <Tabs.Screen
-        name="sets"
+        name="folders"
         options={{
           headerShown: false,
-          title: "Sets",
+          title: "Folders",
           animation: "shift",
           tabBarIcon: () => <Text>📓</Text>,
         }}

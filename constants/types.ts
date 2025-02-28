@@ -1,13 +1,13 @@
 export interface TypingWords {
-  id: number;
+  id: string;
   word: string;
 }
 
-export interface TypingSet {
-  id: number;
+export interface Folders {
+  id: string;
   name: string;
   description?: string;
   words: TypingWords[];
 }
 
-export type TypingSetsList = TypingSet[];
+export type TypingSetsList = Folders[];
