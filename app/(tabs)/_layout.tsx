@@ -22,6 +22,16 @@ export default function Layout() {
           tabBarIcon: () => <Text>📓</Text>,
         }}
       />
+
+      <Tabs.Screen
+        name="settings"
+        options={{
+          headerShown: false,
+          title: "Settings",
+          animation: "shift",
+          tabBarIcon: () => <Text>⚙️</Text>,
+        }}
+      />
     </Tabs>
   );
 }
