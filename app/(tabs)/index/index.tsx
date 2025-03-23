@@ -9,7 +9,7 @@ import { useCallback, useEffect } from "react";
 import { useGlobalState } from "@/storage/global";
 import { Badge } from "@/components/ui/badge";
 import { View } from "react-native";
-import { useFocusEffect } from "expo-router";
+import { useFocusEffect, useNavigation } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TypingTab() {
@@ -23,7 +23,10 @@ export default function TypingTab() {
     currentFolderIdLocal,
     currentWordIdLocal,
     setCurrentWordIdLocal,
+    isPronounceNewWordActiveLocal,
   } = useGlobalState();
+  const navigation = useNavigation();
+  const focused = navigation.isFocused();
   const currentFolder = typingDefaultList.find(
     (item) => item.id == currentFolderIdLocal
   );
@@ -40,8 +43,10 @@ export default function TypingTab() {
   }, []);
 
   useEffect(() => {
-    // Speech.speak(currentWord.word);
-  }, [currentWord]);
+    if (isPronounceNewWordActiveLocal && focused) {
+      Speech.speak(currentWord?.word ?? "");
+    }
+  }, [currentWord, isPronounceNewWordActiveLocal, focused]);
 
   useEffect(() => {
     if (isErrorActive) {
@@ -135,7 +140,7 @@ export default function TypingTab() {
               ) || 0;
             const nextWordId =
               currentFolder?.words[currentWordIndex + 1].id || "";
-              setCurrentWordIdLocal(nextWordId);
+            setCurrentWordIdLocal(nextWordId);
             resetCurrentCharacterIndex();
           }}
           variant="outline"

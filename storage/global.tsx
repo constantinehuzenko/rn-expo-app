@@ -43,6 +43,9 @@ interface GlobalStore {
     folderId: TypingWord["id"],
     wordId: TypingWord["id"]
   ) => void;
+
+  isPronounceNewWordActiveLocal: boolean;
+  togglePronounceNewWordLocal: () => void;
 }
 
 export const useGlobalState = create<GlobalStore>()(
@@ -113,6 +116,15 @@ export const useGlobalState = create<GlobalStore>()(
         folders[folderIndex].words.splice(wordIndex, 1);
         set({ foldersLocal: folders });
       },
+
+      isPronounceNewWordActiveLocal: true,
+      togglePronounceNewWordLocal: () => {
+        const currentState = get().isPronounceNewWordActiveLocal;
+
+        set(() => ({
+          isPronounceNewWordActiveLocal: !currentState,
+        }));
+      },
     }),
     {
       name: `global-storage${TEST_NUMBER}`,
@@ -123,6 +135,7 @@ export const useGlobalState = create<GlobalStore>()(
         foldersLocal: state.foldersLocal,
         currentFolderIdLocal: state.currentFolderIdLocal,
         currentWordIdLocal: state.currentWordIdLocal,
+        isPronounceNewWordActiveLocal: state.isPronounceNewWordActiveLocal,
       }),
 
       onRehydrateStorage: () => {
