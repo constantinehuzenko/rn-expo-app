@@ -38,6 +38,11 @@ interface GlobalStore {
     folderId: TypingWord["id"],
     word: TypingWord["word"]
   ) => void;
+
+  removeWordFromFolder: (
+    folderId: TypingWord["id"],
+    wordId: TypingWord["id"]
+  ) => void;
 }
 
 export const useGlobalState = create<GlobalStore>()(
@@ -92,6 +97,20 @@ export const useGlobalState = create<GlobalStore>()(
         const UUID = Crypto.randomUUID();
 
         folders[folderIndex].words.push({ id: UUID, word });
+        set({ foldersLocal: folders });
+      },
+
+      removeWordFromFolder: (folderId, wordId) => {
+        const folders = get().foldersLocal;
+        const folderIndex = folders.findIndex((item) => item.id === folderId);
+        if (folderIndex === -1) return;
+
+        const wordIndex = folders[folderIndex].words.findIndex(
+          (item) => item.id === wordId
+        );
+        if (wordIndex === -1) return;
+
+        folders[folderIndex].words.splice(wordIndex, 1);
         set({ foldersLocal: folders });
       },
     }),

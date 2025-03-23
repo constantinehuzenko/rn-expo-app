@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { useGlobalState } from "@/storage/global";
 import { useLocalSearchParams } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 
 import {
@@ -27,7 +27,7 @@ import {
 } from "~/components/ui/dialog";
 
 export default function Set() {
-  const { foldersLocal, editWordInFolder, addWordToFolder } = useGlobalState();
+  const { foldersLocal, editWordInFolder, addWordToFolder, removeWordFromFolder } = useGlobalState();
   const { id: folderId } = useLocalSearchParams();
   const [editingModalOpen, setEditingModalOpen] = useState(false);
   const [editingWordId, setEditingWordId] = useState("");
@@ -56,39 +56,48 @@ export default function Set() {
           <Text className="text-2xl">{currentFolder?.name}</Text>
           <Text className="text-lg mb">{currentFolder?.description}</Text>
           <ScrollView className="w-full py-8">
-            <Button variant="outline" onPress={onAddPress} className="mb-4">
-              <Text>➕ Add</Text>
-            </Button>
-
             {currentFolder?.words.map(({ word, id }) => (
               <Card
                 key={word}
-                className="w-full mb-4 flex flex-row justify-between relative"
+                className="w-full relative mb-4 flex flex-row justify-between p-0"
               >
-                <CardHeader>
+                <CardHeader className="">
                   <CardTitle>{word}</CardTitle>
                 </CardHeader>
 
-                <View className="flex h-full">
+                <CardContent className="absolute z-10 right-0 top-0 h-full p-0 flex flex-row items-center gap-4">
                   <Button
-                    size="sm"
+                    size="icon"
                     variant="ghost"
-                    className="flex-1"
+                    onPress={() => {
+                      removeWordFromFolder(folderId as string, id);
+                    }}
+                    className="h-full"
+                  >
+                    <Text>🗑️</Text>
+                  </Button>
+
+                  <Button
+                    size="icon"
+                    variant="ghost"
                     onPress={() => {
                       setEditingWordId(id);
                       setEditingModalOpen(true);
                     }}
+                    className="h-full mr-2"
                   >
                     <Text>✏️</Text>
                   </Button>
-                </View>
+                </CardContent>
               </Card>
             ))}
+          </ScrollView>
 
-            <Button variant="outline" onPress={onAddPress} className="mt-4">
+          <View className="w-full pb-8">
+            <Button onPress={onAddPress} className="w-full">
               <Text>➕ Add</Text>
             </Button>
-          </ScrollView>
+          </View>
         </>
       ) : (
         <Text>Folder not found</Text>
@@ -143,10 +152,7 @@ export default function Set() {
             <Button
               onPress={() => {
                 setAddingModalOpen(false);
-                addWordToFolder(
-                  folderId as string,
-                  addingInputValue
-                );
+                addWordToFolder(folderId as string, addingInputValue);
                 setAddingInputValue("");
               }}
             >
