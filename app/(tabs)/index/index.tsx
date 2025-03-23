@@ -10,7 +10,7 @@ import { useGlobalState } from "@/storage/global";
 import { Badge } from "@/components/ui/badge";
 import { View } from "react-native";
 import { useFocusEffect } from "expo-router";
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TypingTab() {
   const {
@@ -20,22 +20,22 @@ export default function TypingTab() {
     errorCharacter,
     setErrorCharacter,
     getIsErrorActive,
-    localCurrentFolderId,
-    localCurrentWordId,
-    setLocalCurrentWordId,
+    currentFolderIdLocal,
+    currentWordIdLocal,
+    setCurrentWordIdLocal,
   } = useGlobalState();
   const currentFolder = typingDefaultList.find(
-    (item) => item.id == localCurrentFolderId
+    (item) => item.id == currentFolderIdLocal
   );
   const currentWord = currentFolder?.words.find(
-    (item) => item.id === localCurrentWordId
+    (item) => item.id === currentWordIdLocal
   );
   const splitWord = currentWord?.word.split("") || "";
   const isErrorActive = getIsErrorActive();
 
   useEffect(() => {
-    if (localCurrentWordId === "") {
-      setLocalCurrentWordId(currentFolder?.words[0].id || "");
+    if (currentWordIdLocal === "") {
+      setCurrentWordIdLocal(currentFolder?.words[0].id || "");
     }
   }, []);
 
@@ -65,7 +65,7 @@ export default function TypingTab() {
     const isLastLetter = currentCharacterIndex === splitWord.length - 1;
     const currentLetter = splitWord?.[currentCharacterIndex];
     const isThisLastWord =
-      localCurrentWordId === currentFolder?.words.slice(-1)[0].id;
+      currentWordIdLocal === currentFolder?.words.slice(-1)[0].id;
     const shouldStartFolderFromBeginning =
       isLastLetter && key === currentLetter && isThisLastWord;
     const shouldGoToNextWord = isLastLetter && key === currentLetter;
@@ -78,7 +78,7 @@ export default function TypingTab() {
     }
 
     if (shouldStartFolderFromBeginning) {
-      setLocalCurrentWordId(currentFolder?.words[0].id);
+      setCurrentWordIdLocal(currentFolder?.words[0].id);
       resetCurrentCharacterIndex();
       return;
     }
@@ -86,10 +86,10 @@ export default function TypingTab() {
     if (shouldGoToNextWord) {
       const currentWordIndex =
         currentFolder?.words.findIndex(
-          (item) => item.id === localCurrentWordId
+          (item) => item.id === currentWordIdLocal
         ) || 0;
       const nextWordId = currentFolder?.words[currentWordIndex + 1].id || "";
-      setLocalCurrentWordId(nextWordId);
+      setCurrentWordIdLocal(nextWordId);
       resetCurrentCharacterIndex();
       return;
     }
@@ -121,21 +121,21 @@ export default function TypingTab() {
         <Button
           onPress={() => {
             const isThisLastWord =
-              localCurrentWordId === currentFolder?.words.slice(-1)[0].id;
+              currentWordIdLocal === currentFolder?.words.slice(-1)[0].id;
 
             if (isThisLastWord) {
-              setLocalCurrentWordId(currentFolder?.words[0].id || "");
+              setCurrentWordIdLocal(currentFolder?.words[0].id || "");
               resetCurrentCharacterIndex();
               return;
             }
 
             const currentWordIndex =
               currentFolder?.words.findIndex(
-                (item) => item.id === localCurrentWordId
+                (item) => item.id === currentWordIdLocal
               ) || 0;
             const nextWordId =
               currentFolder?.words[currentWordIndex + 1].id || "";
-            setLocalCurrentWordId(nextWordId);
+              setCurrentWordIdLocal(nextWordId);
             resetCurrentCharacterIndex();
           }}
           variant="outline"

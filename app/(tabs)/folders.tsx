@@ -15,15 +15,15 @@ import { ScrollView } from "react-native";
 
 export default function Folders() {
   const {
-    setLocalStorageCurrentFolderId,
-    localFolders,
-    setLocalCurrentWordId,
+    setCurrentFolderIdLocal,
+    foldersLocal,
+    setCurrentWordIdLocal,
   } = useGlobalState();
 
   return (
     <PageWrapper>
       <ScrollView className="w-full flex">
-        {localFolders.map(({ name, description, words, id }) => (
+        {foldersLocal.map(({ name, description, words, id }) => (
           <Card className="w-full mb-4" key={id}>
             <CardHeader>
               <CardTitle>{name}</CardTitle>
@@ -50,8 +50,8 @@ export default function Folders() {
               </Button>
               <Button
                 onPress={() => {
-                  setLocalStorageCurrentFolderId(id);
-                  setLocalCurrentWordId(words[0].id);
+                  setCurrentFolderIdLocal(id);
+                  setCurrentWordIdLocal(words[0].id);
                   router.push("..");
                 }}
                 size="sm"

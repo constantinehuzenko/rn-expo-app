@@ -12,23 +12,35 @@ import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { useGlobalState } from "@/storage/global";
 import { useLocalSearchParams } from "expo-router";
+import { useEffect, useRef, useState } from "react";
 import { ScrollView, View } from "react-native";
 
-// import {
-//   Dialog,
-//   DialogClose,
-//   DialogContent,
-//   DialogDescription,
-//   DialogFooter,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-// } from "~/components/ui/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
 
 export default function Set() {
-  const { localFolders } = useGlobalState();
-  const { id } = useLocalSearchParams();
-  const currentFolder = localFolders.find((item) => item.id === id);
+  const { foldersLocal, editWordInFolder } = useGlobalState();
+  const { id: folderId } = useLocalSearchParams();
+  const [editingModalOpen, setEditingModalOpen] = useState(false);
+  const [editingWordId, setEditingWordId] = useState("");
+  const [inputValue, setInputValue] = useState("");
+
+  const currentFolder = foldersLocal.find((item) => item.id === folderId);
+  const currentEditingWord = currentFolder?.words.find(
+    (item) => item.id === editingWordId
+  )?.word;
+
+  useEffect(() => {
+    setInputValue(currentEditingWord ?? "");
+  }, [currentEditingWord]);
 
   return (
     <PageWrapper safeArea={false}>
@@ -37,7 +49,7 @@ export default function Set() {
           <Text className="text-2xl">{currentFolder?.name}</Text>
           <Text className="text-lg mb">{currentFolder?.description}</Text>
           <ScrollView className="w-full py-8">
-            {currentFolder?.words.map(({ word }) => (
+            {currentFolder?.words.map(({ word, id }) => (
               <Card
                 key={word}
                 className="w-full mb-4 flex flex-row justify-between relative"
@@ -47,7 +59,15 @@ export default function Set() {
                 </CardHeader>
 
                 <View className="flex h-full">
-                  <Button size="sm" variant="ghost" className="flex-1">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="flex-1"
+                    onPress={() => {
+                      setEditingWordId(id);
+                      setEditingModalOpen(true);
+                    }}
+                  >
                     <Text>✏️</Text>
                   </Button>
                 </View>
@@ -62,28 +82,32 @@ export default function Set() {
         <Text>💪 Type</Text>
       </Button> */}
 
-      {/* <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="outline">
-            <Text>Edit Profile</Text>
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+      <Dialog open={editingModalOpen} onOpenChange={setEditingModalOpen}>
+        <DialogContent className="w-screen">
           <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
+            <DialogTitle>Edit word</DialogTitle>
           </DialogHeader>
+          <View>
+            <Input
+              value={inputValue}
+              placeholder="Enter the word"
+              className="mb-4"
+              autoFocus
+              onChangeText={setInputValue}
+            />
+          </View>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button>
-                <Text>OK</Text>
-              </Button>
-            </DialogClose>
+            <Button
+              onPress={() => {
+                setEditingModalOpen(false);
+                editWordInFolder(folderId as string, editingWordId, inputValue);
+              }}
+            >
+              <Text>Save</Text>
+            </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog> */}
+      </Dialog>
     </PageWrapper>
   );
 }

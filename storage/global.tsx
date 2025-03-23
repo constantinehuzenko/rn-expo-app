@@ -1,5 +1,6 @@
+import { TEST_NUMBER } from "@/constants";
 import { typingDefaultList } from "@/constants/data";
-import { Folders, TypingSetsList } from "@/constants/types";
+import { Folders, TypingSetsList, TypingWord } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
@@ -19,12 +20,18 @@ interface GlobalStore {
 
   localWasInitialized: boolean;
 
-  localFolders: TypingSetsList;
-  localCurrentFolderId: string;
-  setLocalStorageCurrentFolderId: (localCurrentFolderId: string) => void;
+  foldersLocal: TypingSetsList;
+  currentFolderIdLocal: string;
+  setCurrentFolderIdLocal: (localCurrentFolderId: string) => void;
 
-  localCurrentWordId: string;
-  setLocalCurrentWordId: (currentWordId: string) => void;
+  currentWordIdLocal: string;
+  setCurrentWordIdLocal: (currentWordId: string) => void;
+
+  editWordInFolder: (
+    folderId: TypingWord["word"],
+    wordId: TypingWord["id"],
+    newWord: TypingWord["word"]
+  ) => void;
 }
 
 export const useGlobalState = create<GlobalStore>()(
@@ -33,8 +40,8 @@ export const useGlobalState = create<GlobalStore>()(
       folderId: "0",
       setFolderId: (folderId) => set({ folderId }),
       getCurrentFolder: () =>
-        get().localFolders.find(
-          (item) => item.id === get().localCurrentFolderId
+        get().foldersLocal.find(
+          (item) => item.id === get().currentFolderIdLocal
         ),
 
       currentCharacterIndex: 0,
@@ -48,24 +55,38 @@ export const useGlobalState = create<GlobalStore>()(
 
       localWasInitialized: false,
 
-      localFolders: [],
-      localCurrentFolderId: "0",
-      setLocalStorageCurrentFolderId: (localCurrentFolderId) =>
-        set({ localCurrentFolderId }),
+      foldersLocal: [],
+      currentFolderIdLocal: "0",
+      setCurrentFolderIdLocal: (currentFolderIdLocal) =>
+        set({ currentFolderIdLocal }),
 
-      localCurrentWordId: "",
-      setLocalCurrentWordId: (localCurrentWordId) =>
-        set({ localCurrentWordId }),
+      currentWordIdLocal: "",
+      setCurrentWordIdLocal: (currentWordIdLocal) =>
+        set({ currentWordIdLocal }),
+
+      editWordInFolder: (folderId, wordId, newWord) => {
+        const folders = get().foldersLocal;
+        const folderIndex = folders.findIndex((item) => item.id === folderId);
+        const folder = folders[folderIndex];
+        if (folderIndex === -1) return;
+
+        const wordIndex = folder.words.findIndex((item) => item.id === wordId);
+        if (wordIndex === -1) return;
+
+        folder.words[wordIndex].word = newWord;
+        folders[folderIndex] = folder;
+        set({ foldersLocal: folders });
+      },
     }),
     {
-      name: "global-storage3",
+      name: `global-storage${TEST_NUMBER}`,
       storage: createJSONStorage(() => AsyncStorage),
 
       partialize: (state) => ({
         localWasInitialized: state.localWasInitialized,
-        localFolders: state.localFolders,
-        localCurrentFolderId: state.localCurrentFolderId,
-        localCurrentWordId: state.localCurrentWordId,
+        foldersLocal: state.foldersLocal,
+        currentFolderIdLocal: state.currentFolderIdLocal,
+        currentWordIdLocal: state.currentWordIdLocal,
       }),
 
       onRehydrateStorage: () => {
@@ -73,7 +94,7 @@ export const useGlobalState = create<GlobalStore>()(
           if (storedState && !storedState.localWasInitialized) {
             useGlobalState.setState({
               localWasInitialized: true,
-              localFolders: typingDefaultList,
+              foldersLocal: typingDefaultList,
             });
           }
         };
