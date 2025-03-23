@@ -17,6 +17,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { NAV_THEME } from "@/lib/constants";
 import { TypingSetsList } from "@/constants/types";
 import { Text } from "react-native";
+import { PortalHost } from "@rn-primitives/portal";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -60,6 +61,7 @@ export default function RootLayout() {
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
+      <PortalHost />
     </ThemeProvider>
   );
 }

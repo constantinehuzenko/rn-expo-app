@@ -54,7 +54,7 @@ export const Keyboard = ({ onKeyboardPress }: KeyboardProps) => {
                 <Button
                   size="sm"
                   variant="outline"
-                  className={clsx("flex w-full h-full", {
+                  className={clsx("flex w-full h-full ", {
                     "opacity-0 pointer-events-none": key === "",
                   })}
                   onPressIn={() => {
@@ -63,7 +63,7 @@ export const Keyboard = ({ onKeyboardPress }: KeyboardProps) => {
                     onKeyboardPress(key);
                     {
                       top.value = withTiming(top.value - 40, {
-                        duration: 50,
+                        duration: 75,
                         easing: Easing.linear,
                       });
                     }

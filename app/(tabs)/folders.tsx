@@ -9,32 +9,21 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
-import { FOLDERS_STORAGE_KEY } from "@/constants";
-import { TypingSetsList } from "@/constants/types";
 import { useGlobalState } from "@/storage/global";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
-import { ScrollView, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView } from "react-native";
 
 export default function Folders() {
-  const [folders, setFolders] = useState<TypingSetsList>([]);
-  const { setLocalStorageCurrentFolderId } = useGlobalState();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await AsyncStorage.getItem(FOLDERS_STORAGE_KEY);
-      const parsedData = JSON.parse(data || "[]");
-      setFolders(parsedData as TypingSetsList);
-    };
-    fetchData();
-  }, []);
+  const {
+    setLocalStorageCurrentFolderId,
+    localFolders,
+    setLocalCurrentWordId,
+  } = useGlobalState();
 
   return (
     <PageWrapper>
       <ScrollView className="w-full flex">
-        {folders.map(({ name, description, words, id }) => (
+        {localFolders.map(({ name, description, words, id }) => (
           <Card className="w-full mb-4" key={id}>
             <CardHeader>
               <CardTitle>{name}</CardTitle>
@@ -62,6 +51,7 @@ export default function Folders() {
               <Button
                 onPress={() => {
                   setLocalStorageCurrentFolderId(id);
+                  setLocalCurrentWordId(words[0].id);
                   router.push("..");
                 }}
                 size="sm"
