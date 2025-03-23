@@ -15,7 +15,7 @@ export const TypingInput = ({ currentWord }: TypingInputProps) => {
   const splitWord = currentWord.split("");
 
   return (
-    <View className="flex flex-col items-center justify-center w-full mb-6">
+    <View className="flex flex-col items-center justify-end w-full h-full mb-24">
       <View className="flex flex-row flex-wrap items-center justify-center gap-1">
         {splitWord.map((letter, index) => (
           <View
