@@ -4,6 +4,7 @@ import { Folders, TypingSetsList, TypingWord } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+import * as Crypto from "expo-crypto";
 
 interface GlobalStore {
   folderId: string;
@@ -31,6 +32,11 @@ interface GlobalStore {
     folderId: TypingWord["word"],
     wordId: TypingWord["id"],
     newWord: TypingWord["word"]
+  ) => void;
+
+  addWordToFolder: (
+    folderId: TypingWord["id"],
+    word: TypingWord["word"]
   ) => void;
 }
 
@@ -75,6 +81,17 @@ export const useGlobalState = create<GlobalStore>()(
 
         folder.words[wordIndex].word = newWord;
         folders[folderIndex] = folder;
+        set({ foldersLocal: folders });
+      },
+
+      addWordToFolder: (folderId, word) => {
+        const folders = get().foldersLocal;
+        const folderIndex = folders.findIndex((item) => item.id === folderId);
+        if (folderIndex === -1) return;
+
+        const UUID = Crypto.randomUUID();
+
+        folders[folderIndex].words.push({ id: UUID, word });
         set({ foldersLocal: folders });
       },
     }),

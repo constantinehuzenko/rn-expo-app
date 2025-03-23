@@ -27,19 +27,26 @@ import {
 } from "~/components/ui/dialog";
 
 export default function Set() {
-  const { foldersLocal, editWordInFolder } = useGlobalState();
+  const { foldersLocal, editWordInFolder, addWordToFolder } = useGlobalState();
   const { id: folderId } = useLocalSearchParams();
   const [editingModalOpen, setEditingModalOpen] = useState(false);
   const [editingWordId, setEditingWordId] = useState("");
-  const [inputValue, setInputValue] = useState("");
+  const [editingInputValue, setEditingInputValue] = useState("");
+
+  const [addingModalOpen, setAddingModalOpen] = useState(false);
+  const [addingInputValue, setAddingInputValue] = useState("");
 
   const currentFolder = foldersLocal.find((item) => item.id === folderId);
   const currentEditingWord = currentFolder?.words.find(
     (item) => item.id === editingWordId
   )?.word;
 
+  const onAddPress = () => {
+    setAddingModalOpen(true);
+  };
+
   useEffect(() => {
-    setInputValue(currentEditingWord ?? "");
+    setEditingInputValue(currentEditingWord ?? "");
   }, [currentEditingWord]);
 
   return (
@@ -49,6 +56,10 @@ export default function Set() {
           <Text className="text-2xl">{currentFolder?.name}</Text>
           <Text className="text-lg mb">{currentFolder?.description}</Text>
           <ScrollView className="w-full py-8">
+            <Button variant="outline" onPress={onAddPress} className="mb-4">
+              <Text>➕ Add</Text>
+            </Button>
+
             {currentFolder?.words.map(({ word, id }) => (
               <Card
                 key={word}
@@ -73,14 +84,15 @@ export default function Set() {
                 </View>
               </Card>
             ))}
+
+            <Button variant="outline" onPress={onAddPress} className="mt-4">
+              <Text>➕ Add</Text>
+            </Button>
           </ScrollView>
         </>
       ) : (
         <Text>Folder not found</Text>
       )}
-      {/* <Button>
-        <Text>💪 Type</Text>
-      </Button> */}
 
       <Dialog open={editingModalOpen} onOpenChange={setEditingModalOpen}>
         <DialogContent className="w-screen">
@@ -89,18 +101,53 @@ export default function Set() {
           </DialogHeader>
           <View>
             <Input
-              value={inputValue}
+              value={editingInputValue}
               placeholder="Enter the word"
               className="mb-4"
               autoFocus
-              onChangeText={setInputValue}
+              onChangeText={setEditingInputValue}
             />
           </View>
           <DialogFooter>
             <Button
               onPress={() => {
                 setEditingModalOpen(false);
-                editWordInFolder(folderId as string, editingWordId, inputValue);
+                editWordInFolder(
+                  folderId as string,
+                  editingWordId,
+                  editingInputValue
+                );
+              }}
+            >
+              <Text>Save</Text>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={addingModalOpen} onOpenChange={setAddingModalOpen}>
+        <DialogContent className="w-screen">
+          <DialogHeader>
+            <DialogTitle>Add word</DialogTitle>
+          </DialogHeader>
+          <View>
+            <Input
+              value={addingInputValue}
+              placeholder="Enter the word"
+              className="mb-4"
+              autoFocus
+              onChangeText={setAddingInputValue}
+            />
+          </View>
+          <DialogFooter>
+            <Button
+              onPress={() => {
+                setAddingModalOpen(false);
+                addWordToFolder(
+                  folderId as string,
+                  addingInputValue
+                );
+                setAddingInputValue("");
               }}
             >
               <Text>Save</Text>
