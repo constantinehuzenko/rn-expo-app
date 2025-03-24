@@ -27,7 +27,7 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 
-export default function Set() {
+export default function Folder() {
   const {
     foldersLocal,
     editWordInFolder,

@@ -40,7 +40,7 @@ export default function Folders() {
             <CardFooter className="flex gap-2 justify-end">
               <Button
                 onPress={() => {
-                  router.push(`/set/${id}`);
+                  router.push(`/folder/${id}`);
                 }}
                 size="sm"
                 variant="outline"
