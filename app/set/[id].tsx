@@ -14,6 +14,7 @@ import { useGlobalState } from "@/storage/global";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
   Dialog,
@@ -27,7 +28,12 @@ import {
 } from "~/components/ui/dialog";
 
 export default function Set() {
-  const { foldersLocal, editWordInFolder, addWordToFolder, removeWordFromFolder } = useGlobalState();
+  const {
+    foldersLocal,
+    editWordInFolder,
+    addWordToFolder,
+    removeWordFromFolder,
+  } = useGlobalState();
   const { id: folderId } = useLocalSearchParams();
   const [editingModalOpen, setEditingModalOpen] = useState(false);
   const [editingWordId, setEditingWordId] = useState("");
@@ -81,7 +87,7 @@ export default function Set() {
                     size="icon"
                     variant="ghost"
                     onPress={() => {
-                      setEditingWordId(id);
+                      setEditingWordId(id ?? "");
                       setEditingModalOpen(true);
                     }}
                     className="h-full mr-2"
@@ -93,11 +99,11 @@ export default function Set() {
             ))}
           </ScrollView>
 
-          <View className="w-full pb-8">
+          <SafeAreaView className="w-full">
             <Button onPress={onAddPress} className="w-full">
               <Text>➕ Add</Text>
             </Button>
-          </View>
+          </SafeAreaView>
         </>
       ) : (
         <Text>Folder not found</Text>

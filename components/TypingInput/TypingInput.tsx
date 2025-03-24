@@ -37,7 +37,7 @@ export const TypingInput = ({ currentWord }: TypingInputProps) => {
             key={`${index}-${letter}`}
           >
             <>
-              <Text className="absolute top-[-20px]">{letter}</Text>
+              {/* <Text className="absolute top-[-20px]">{letter}</Text> */}
               <Text className="text-zinc-300 text-2xl">
                 {index < currentCharacterIndex ? letter : ""}
                 {isErrorActive && currentCharacterIndex === index
