@@ -5,7 +5,7 @@ import { Text } from "@/components/ui/text";
 import { typingDefaultList } from "@/constants/data";
 import * as Speech from "expo-speech";
 import { Keyboard } from "@/components/Keyboard/Keyboard";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useGlobalState } from "@/storage/global";
 import { Badge } from "@/components/ui/badge";
 import { View } from "react-native";
@@ -20,6 +20,8 @@ export default function TypingTab() {
     errorCharacter,
     setErrorCharacter,
     getIsErrorActive,
+    isWordSuccessfullyTyped,
+    setIsWordSuccessfullyTyped,
     currentFolderIdLocal,
     currentWordIdLocal,
     setCurrentWordIdLocal,
@@ -73,7 +75,7 @@ export default function TypingTab() {
       currentWordIdLocal === currentFolder?.words.slice(-1)[0].id;
     const shouldStartFolderFromBeginning =
       isLastLetter && key === currentLetter && isThisLastWord;
-    const shouldGoToNextWord = isLastLetter && key === currentLetter;
+    const isLastCorrectCharacter = isLastLetter && key === currentLetter;
     const nextChart = splitWord[currentCharacterIndex + 1];
     const isLetter = (char: string) => /^[a-zA-Z]$/.test(char);
 
@@ -82,13 +84,26 @@ export default function TypingTab() {
       return;
     }
 
+    // if (shouldStartFolderFromBeginning && isLastCorrectCharacter) {
+    //   setCurrentWordIdLocal(currentFolder?.words[0].id);
+    //   resetCurrentCharacterIndex();
+    //   setIsWordSuccessfullyTyped(false);
+    //   return;
+    // }
+
     if (shouldStartFolderFromBeginning) {
-      setCurrentWordIdLocal(currentFolder?.words[0].id);
-      resetCurrentCharacterIndex();
+      setNextCurrentCharacterIndex();
+      setIsWordSuccessfullyTyped(true);
       return;
+      // setCurrentWordIdLocal(currentFolder?.words[0].id);
+      // resetCurrentCharacterIndex();
+      // return;
     }
 
-    if (shouldGoToNextWord) {
+    if (isLastCorrectCharacter) {
+      setNextCurrentCharacterIndex();
+      setIsWordSuccessfullyTyped(true);
+      return;
       const currentWordIndex =
         currentFolder?.words.findIndex(
           (item) => item.id === currentWordIdLocal
@@ -131,6 +146,7 @@ export default function TypingTab() {
             if (isThisLastWord) {
               setCurrentWordIdLocal(currentFolder?.words[0].id || "");
               resetCurrentCharacterIndex();
+              setIsWordSuccessfullyTyped(false);
               return;
             }
 
@@ -142,6 +158,7 @@ export default function TypingTab() {
               currentFolder?.words[currentWordIndex + 1].id || "";
             setCurrentWordIdLocal(nextWordId);
             resetCurrentCharacterIndex();
+            setIsWordSuccessfullyTyped(false);
           }}
           variant="outline"
         >

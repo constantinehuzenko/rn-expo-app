@@ -11,6 +11,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useState } from "react";
+import { BlurView } from "expo-blur";
+import { useGlobalState } from "@/storage/global";
 
 const KEYBOARD_ROWS = [
   ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
@@ -26,13 +28,62 @@ export const Keyboard = ({ onKeyboardPress }: KeyboardProps) => {
   const top = useSharedValue(0);
   const [pressedRow, setPressedRow] = useState(0);
   const [pressedKey, setPressedKey] = useState(0);
+  const {
+    isWordSuccessfullyTyped,
+    currentWordIdLocal,
+    foldersLocal,
+    currentFolderIdLocal,
+    setCurrentWordIdLocal,
+    resetCurrentCharacterIndex,
+    setIsWordSuccessfullyTyped,
+  } = useGlobalState();
+  const currentFolder = foldersLocal.find(
+    (item) => item.id == currentFolderIdLocal
+  );
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: top.value }],
   }));
 
   return (
-    <View className="flex flex-2 flex-col items-center justify-center w-full mb-8">
+    <View className="relative flex flex-2 flex-col items-center justify-center w-full mb-8">
+      {isWordSuccessfullyTyped ? (
+        <BlurView
+          className="absolute flex justify-center items-center top-[-4] right-0 w-full h-[150%] z-10"
+          intensity={10}
+        >
+          <Button
+            variant="outline"
+            size="lg"
+            onPress={() => {
+              // TODO: move this logic to global store as well as the same logic in typing component
+              const isThisLastWord =
+                currentWordIdLocal === currentFolder?.words.slice(-1)[0].id;
+
+              if (isThisLastWord) {
+                setCurrentWordIdLocal(currentFolder?.words[0].id || "");
+                resetCurrentCharacterIndex();
+                setIsWordSuccessfullyTyped(false);
+                return;
+              }
+
+              const currentWordIndex =
+                currentFolder?.words.findIndex(
+                  (item) => item.id === currentWordIdLocal
+                ) || 0;
+              const nextWordId =
+                currentFolder?.words[currentWordIndex + 1].id || "";
+              setCurrentWordIdLocal(nextWordId);
+              resetCurrentCharacterIndex();
+              setIsWordSuccessfullyTyped(false);
+            }}
+            className="m-2"
+          >
+            <Text>⏭️ Next word</Text>
+          </Button>
+        </BlurView>
+      ) : null}
+
       {KEYBOARD_ROWS.map((row, index) => (
         <View key={index} className="flex flex-row justify-center w-full">
           {row.map((key, keyIndex) => (

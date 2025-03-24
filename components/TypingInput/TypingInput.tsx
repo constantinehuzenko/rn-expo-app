@@ -8,8 +8,12 @@ interface TypingInputProps {
 }
 
 export const TypingInput = ({ currentWord }: TypingInputProps) => {
-  const { currentCharacterIndex, errorCharacter, getIsErrorActive } =
-    useGlobalState();
+  const {
+    currentCharacterIndex,
+    errorCharacter,
+    getIsErrorActive,
+    isWordSuccessfullyTyped,
+  } = useGlobalState();
   const isErrorActive = getIsErrorActive();
 
   const splitWord = currentWord.split("");
@@ -27,12 +31,13 @@ export const TypingInput = ({ currentWord }: TypingInputProps) => {
                   currentCharacterIndex === index && !isErrorActive,
                 "border-red-600":
                   currentCharacterIndex === index && isErrorActive,
+                "border-green-600": isWordSuccessfullyTyped,
               }
             )}
             key={`${index}-${letter}`}
           >
             <>
-              {/* <Text className="absolute top-[-20px]">{letter}</Text> */}
+              <Text className="absolute top-[-20px]">{letter}</Text>
               <Text className="text-zinc-300 text-2xl">
                 {index < currentCharacterIndex ? letter : ""}
                 {isErrorActive && currentCharacterIndex === index

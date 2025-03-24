@@ -46,6 +46,9 @@ interface GlobalStore {
 
   isPronounceNewWordActiveLocal: boolean;
   togglePronounceNewWordLocal: () => void;
+
+  isWordSuccessfullyTyped: boolean;
+  setIsWordSuccessfullyTyped: (isWordSuccessfullyTyped: boolean) => void;
 }
 
 export const useGlobalState = create<GlobalStore>()(
@@ -116,6 +119,10 @@ export const useGlobalState = create<GlobalStore>()(
         folders[folderIndex].words.splice(wordIndex, 1);
         set({ foldersLocal: folders });
       },
+
+      isWordSuccessfullyTyped: false,
+      setIsWordSuccessfullyTyped: (isWordSuccessfullyTyped) =>
+        set({ isWordSuccessfullyTyped }),
 
       isPronounceNewWordActiveLocal: true,
       togglePronounceNewWordLocal: () => {
