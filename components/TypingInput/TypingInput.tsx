@@ -2,6 +2,7 @@ import { View } from "react-native";
 import { Text } from "../ui/text";
 import clsx from "clsx";
 import { useGlobalState } from "@/storage/global";
+import Constants from "expo-constants";
 
 interface TypingInputProps {
   currentWord: string;
@@ -37,7 +38,9 @@ export const TypingInput = ({ currentWord }: TypingInputProps) => {
             key={`${index}-${letter}`}
           >
             <>
-              {/* <Text className="absolute top-[-20px]">{letter}</Text> */}
+              {__DEV__ ? (
+                <Text className="absolute top-[-20px]">{letter}</Text>
+              ) : null}
               <Text className="text-zinc-300 text-2xl">
                 {index < currentCharacterIndex ? letter : ""}
                 {isErrorActive && currentCharacterIndex === index

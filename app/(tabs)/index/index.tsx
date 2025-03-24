@@ -2,7 +2,6 @@ import { PageWrapper } from "@/components/PageWrapper";
 import { TypingInput } from "@/components/TypingInput/TypingInput";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
-import { typingDefaultList } from "@/constants/data";
 import * as Speech from "expo-speech";
 import { Keyboard } from "@/components/Keyboard/Keyboard";
 import { useCallback, useEffect, useState } from "react";
@@ -26,10 +25,11 @@ export default function TypingTab() {
     currentWordIdLocal,
     setCurrentWordIdLocal,
     isPronounceNewWordActiveLocal,
+    foldersLocal,
   } = useGlobalState();
   const navigation = useNavigation();
   const focused = navigation.isFocused();
-  const currentFolder = typingDefaultList.find(
+  const currentFolder = foldersLocal.find(
     (item) => item.id == currentFolderIdLocal
   );
   const currentWord = currentFolder?.words.find(
