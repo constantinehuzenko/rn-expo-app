@@ -11,7 +11,7 @@ import {
 import { Text } from "@/components/ui/text";
 import { useGlobalState } from "@/storage/global";
 import { router } from "expo-router";
-import { ScrollView } from "react-native";
+import Animated from 'react-native-reanimated';
 
 export default function Folders() {
   const {
@@ -22,7 +22,7 @@ export default function Folders() {
 
   return (
     <PageWrapper>
-      <ScrollView className="w-full flex">
+      <Animated.ScrollView className="w-full flex">
         {foldersLocal.map(({ name, description, words, id }) => (
           <Card className="w-full mb-4" key={id}>
             <CardHeader>
@@ -63,7 +63,7 @@ export default function Folders() {
             </CardFooter>
           </Card>
         ))}
-      </ScrollView>
+      </Animated.ScrollView>
     </PageWrapper>
   );
 }

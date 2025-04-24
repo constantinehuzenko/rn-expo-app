@@ -30,17 +30,17 @@ export default function TypingTab() {
   const navigation = useNavigation();
   const focused = navigation.isFocused();
   const currentFolder = foldersLocal.find(
-    (item) => item.id == currentFolderIdLocal
+    (item) => item?.id == currentFolderIdLocal
   );
   const currentWord = currentFolder?.words.find(
-    (item) => item.id === currentWordIdLocal
+    (item) => item?.id === currentWordIdLocal
   );
   const splitWord = currentWord?.word.split("") || "";
   const isErrorActive = getIsErrorActive();
 
   useEffect(() => {
     if (currentWordIdLocal === "") {
-      setCurrentWordIdLocal(currentFolder?.words[0].id || "");
+      setCurrentWordIdLocal(currentFolder?.words?.[0]?.id || "");
     }
   }, []);
 

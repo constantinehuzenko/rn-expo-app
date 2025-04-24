@@ -18,6 +18,7 @@ import { NAV_THEME } from "@/lib/constants";
 import { TypingSetsList } from "@/constants/types";
 import { Text } from "react-native";
 import { PortalHost } from "@rn-primitives/portal";
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -55,17 +56,19 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={DARK_THEME}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="folder/[id]"
-          options={{ title: "", headerBackButtonDisplayMode: "minimal" }}
-        />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-      <PortalHost />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <ThemeProvider value={DARK_THEME}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="folder/[id]"
+            options={{ title: "", headerBackButtonDisplayMode: "minimal" }}
+          />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <StatusBar style="auto" />
+        <PortalHost />
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 }
