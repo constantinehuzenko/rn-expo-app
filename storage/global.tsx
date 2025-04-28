@@ -77,7 +77,7 @@ export const useGlobalState = create<GlobalStore>()(
       setCurrentFolderIdLocal: (currentFolderIdLocal) =>
         set({ currentFolderIdLocal }),
 
-      currentWordIdLocal: "",
+      currentWordIdLocal: "0",
       setCurrentWordIdLocal: (currentWordIdLocal) =>
         set({ currentWordIdLocal }),
 

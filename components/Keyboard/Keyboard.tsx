@@ -81,6 +81,19 @@ export const Keyboard = ({ onKeyboardPress }: KeyboardProps) => {
           >
             <Text>⏭️ Next word</Text>
           </Button>
+
+          <Button
+            variant="outline"
+            size="lg"
+            onPress={() => {
+              // TODO: move this logic to global store as well as the same logic in typing component
+              setIsWordSuccessfullyTyped(false);
+              resetCurrentCharacterIndex();
+            }}
+            className="m-2"
+          >
+            <Text>🔁 Repeat word</Text>
+          </Button>
         </BlurView>
       ) : null}
 

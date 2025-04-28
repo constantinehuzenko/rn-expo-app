@@ -42,7 +42,7 @@ export default function TypingTab() {
     if (currentWordIdLocal === "") {
       setCurrentWordIdLocal(currentFolder?.words?.[0]?.id || "");
     }
-  }, []);
+  }, [focused]);
 
   useEffect(() => {
     if (isPronounceNewWordActiveLocal && focused) {
