@@ -13,6 +13,7 @@ import Animated, {
 import { useState } from "react";
 import { BlurView } from "expo-blur";
 import { useGlobalState } from "@/storage/global";
+import * as Haptics from 'expo-haptics';
 
 const KEYBOARD_ROWS = [
   ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
@@ -124,15 +125,16 @@ export const Keyboard = ({ onKeyboardPress }: KeyboardProps) => {
                   onPressIn={() => {
                     setPressedRow(index);
                     setPressedKey(keyIndex);
-                    onKeyboardPress(key);
+                    Haptics.selectionAsync();
                     {
                       top.value = withTiming(top.value - 40, {
-                        duration: 75,
+                        duration: 10,
                         easing: Easing.linear,
                       });
                     }
                   }}
                   onPressOut={() => {
+                    onKeyboardPress(key);
                     top.value = withTiming(0, {
                       duration: 10,
                       easing: Easing.linear,

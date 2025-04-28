@@ -121,7 +121,7 @@ export default function Folder() {
               className="mb-4"
               autoFocus
               onChangeText={setEditingInputValue}
-              autoCapitalize='none'
+              autoCapitalize="none"
             />
           </View>
           <DialogFooter>
@@ -153,7 +153,7 @@ export default function Folder() {
               className="mb-4"
               autoFocus
               onChangeText={setAddingInputValue}
-              autoCapitalize='none'
+              autoCapitalize="none"
             />
           </View>
           <DialogFooter>

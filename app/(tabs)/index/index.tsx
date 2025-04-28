@@ -7,9 +7,10 @@ import { Keyboard } from "@/components/Keyboard/Keyboard";
 import { useCallback, useEffect, useState } from "react";
 import { useGlobalState } from "@/storage/global";
 import { Badge } from "@/components/ui/badge";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import { useFocusEffect, useNavigation } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import clsx from "clsx";
 
 export default function TypingTab() {
   const {
@@ -128,7 +129,12 @@ export default function TypingTab() {
   };
 
   return (
-    <SafeAreaView className="flex flex-col items-center justify-center w-full h-full">
+    <SafeAreaView
+      className={clsx(
+        "flex flex-col items-center justify-center w-full h-full",
+        Platform.OS === "android" ? "pb-8" : ""
+      )}
+    >
       <Badge className="mt-2" variant="outline">
         <Text>CURRENT FOLDER: {currentFolder?.name}</Text>
       </Badge>
