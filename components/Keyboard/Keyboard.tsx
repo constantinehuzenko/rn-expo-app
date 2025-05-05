@@ -126,12 +126,12 @@ export const Keyboard = ({ onKeyboardPress }: KeyboardProps) => {
                     setPressedRow(index);
                     setPressedKey(keyIndex);
                     Haptics.selectionAsync();
-                    {
-                      top.value = withTiming(top.value - 40, {
-                        duration: 10,
-                        easing: Easing.linear,
-                      });
-                    }
+                    // {
+                    //   top.value = withTiming(top.value - 40, {
+                    //     duration: 10,
+                    //     easing: Easing.linear,
+                    //   });
+                    // }
                   }}
                   onPressOut={() => {
                     onKeyboardPress(key);
