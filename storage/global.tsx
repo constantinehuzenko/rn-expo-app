@@ -7,6 +7,9 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import * as Crypto from "expo-crypto";
 
 interface GlobalStore {
+  isSignInVisible: boolean;
+  setIsSignInVisible: (isSignInVisible: boolean) => void;
+
   folderId: string;
   setFolderId: (folderId: string) => void;
   getCurrentFolder: () => Folders | undefined;
@@ -54,6 +57,9 @@ interface GlobalStore {
 export const useGlobalState = create<GlobalStore>()(
   persist(
     (set, get) => ({
+      isSignInVisible: true,
+      setIsSignInVisible: (isSignInVisible) => set({ isSignInVisible }),
+
       folderId: "0",
       setFolderId: (folderId) => set({ folderId }),
       getCurrentFolder: () =>

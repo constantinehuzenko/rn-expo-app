@@ -19,6 +19,8 @@ import { TypingSetsList } from "@/constants/types";
 import { Text } from "react-native";
 import { PortalHost } from "@rn-primitives/portal";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { ClerkProvider } from "@clerk/clerk-expo";
+import { tokenCache } from "@clerk/clerk-expo/token-cache";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -58,16 +60,18 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <ThemeProvider value={DARK_THEME}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="folder/[id]"
-            options={{ title: "", headerBackButtonDisplayMode: "minimal" }}
-          />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
-        <PortalHost />
+        <ClerkProvider tokenCache={tokenCache}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="folder/[id]"
+              options={{ title: "", headerBackButtonDisplayMode: "minimal" }}
+            />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
+          <PortalHost />
+        </ClerkProvider>
       </ThemeProvider>
     </SafeAreaProvider>
   );
