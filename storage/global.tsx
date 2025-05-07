@@ -2,7 +2,7 @@ import { TEST_NUMBER } from "@/constants";
 import { typingDefaultList } from "@/constants/data";
 import { Folders, TypingSetsList, TypingWord } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { create } from "zustand";
+import { createWithEqualityFn } from "zustand/traditional";
 import { persist, createJSONStorage } from "zustand/middleware";
 import * as Crypto from "expo-crypto";
 
@@ -51,7 +51,7 @@ interface GlobalStore {
   setIsWordSuccessfullyTyped: (isWordSuccessfullyTyped: boolean) => void;
 }
 
-export const useGlobalState = create<GlobalStore>()(
+export const useGlobalState = createWithEqualityFn<GlobalStore>()(
   persist(
     (set, get) => ({
       folderId: "0",
