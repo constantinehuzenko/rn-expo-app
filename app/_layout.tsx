@@ -8,7 +8,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { createContext, ReactNode, useEffect } from "react";
 import "react-native-reanimated";
 import "~/global.css";
 import * as SystemUI from "expo-system-ui";
@@ -19,8 +19,11 @@ import { TypingSetsList } from "@/constants/types";
 import { Text } from "react-native";
 import { PortalHost } from "@rn-primitives/portal";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { ClerkProvider } from "@clerk/clerk-expo";
+import { ClerkProvider, useSession, useUser } from "@clerk/clerk-expo";
 import { tokenCache } from "@clerk/clerk-expo/token-cache";
+import { UserResource, SignedInSessionResource } from "@clerk/types";
+import { getSupabaseClient } from "./utils/supabase";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -38,6 +41,19 @@ export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from "expo-router";
+
+export const SupabaseContext = createContext<SupabaseClient | null>(null);
+
+export const SupabaseProvider = ({ children }: { children: ReactNode }) => {
+  const { session } = useSession();
+  const supabaseClient = getSupabaseClient({ session });
+
+  return (
+    <SupabaseContext.Provider value={supabaseClient}>
+      {children}
+    </SupabaseContext.Provider>
+  );
+};
 
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
@@ -61,16 +77,18 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <ThemeProvider value={DARK_THEME}>
         <ClerkProvider tokenCache={tokenCache}>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="folder/[id]"
-              options={{ title: "", headerBackButtonDisplayMode: "minimal" }}
-            />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-          <StatusBar style="auto" />
-          <PortalHost />
+          <SupabaseProvider>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="folder/[id]"
+                options={{ title: "", headerBackButtonDisplayMode: "minimal" }}
+              />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+            <StatusBar style="auto" />
+            <PortalHost />
+          </SupabaseProvider>
         </ClerkProvider>
       </ThemeProvider>
     </SafeAreaProvider>

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@clerk/clerk-expo": "^2.10.7",
+    "@clerk/types": "^4.57.1",
     "@expo/vector-icons": "^14.0.2",
     "@radix-ui/react-dialog": "^1.1.6",
     "@react-native-async-storage/async-storage": "1.23.1",

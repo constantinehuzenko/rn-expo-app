@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import * as Crypto from "expo-crypto";
+import useSupabaseClient from '@/app/utils/useSupabaseClient';
 
 interface GlobalStore {
   isSignInVisible: boolean;
@@ -152,7 +153,11 @@ export const useGlobalState = create<GlobalStore>()(
       }),
 
       onRehydrateStorage: () => {
-        return (storedState) => {
+        return async (storedState) => {
+
+          const supabase = useSupabaseClient();
+
+
           if (storedState && !storedState.localWasInitialized) {
             useGlobalState.setState({
               localWasInitialized: true,
