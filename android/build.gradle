@@ -13,11 +13,13 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://maven.expo.dev' } 
     }
     dependencies {
         classpath('com.android.tools.build:gradle')
         classpath('com.facebook.react:react-native-gradle-plugin')
         classpath('org.jetbrains.kotlin:kotlin-gradle-plugin')
+        classpath('host.exp.gradle:expo-module-gradle-plugin:0.0.1')
     }
 }
 
